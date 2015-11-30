@@ -1,0 +1,126 @@
+<?php 
+/**
+ * Implements hook_menu()
+ */
+function my_theming_menu(){
+	$items = array();
+	$items['my-theming'] = array(
+		'title'           => 'My Theming',
+		'page callback'   => 'my_theming',
+		'access callback' => TRUE
+	);
+	return $items;
+}
+
+/**
+ * Function my_theming
+ */
+
+function my_theming(){
+	return my_theming_list() . my_theming_table() . my_theming_fieldset() . my_theming_image_style();
+}
+
+/**
+ * Function my_theming_list
+ */
+
+function my_theming_list() {
+$variables = array(
+  'items'      => array(),
+  'title'      => 'My list items',
+  'type'       => 'ol',
+  'attributes' => array(),
+);
+ 
+$variables['items'][] = 'one';
+$variables['items'][] = 'two';
+$variables['items'][] = array(
+  'data' => 'three',
+  'children' => array('one','two',
+	  array(
+	  	'data' => 'three',
+	  	'children' => array('one','two',
+			  array(
+			  	'data' => 'three',
+			  	'children' => array('one','two', 'three'),
+			  )
+			)  
+		)
+	)
+);
+return theme('item_list', $variables);
+}
+
+/**
+ * Function my_theming_list
+ */
+function my_theming_table(){
+	$items = array(
+	  array(
+	    'sender'   => 'Lorem',
+	    'receiver' => 'Dolorem',
+	    'message'  => 'This is a message',
+	    'amount'   => 5,
+	  ),
+	  array(
+	    'sender'   => 'Dolorem',
+	    'receiver' => 'Lorem',
+	    'message'  => 'This is the reply',
+	    'amount'   => 7,
+	  ),
+	);
+	 
+	$header = array(t('From'), t('To'), t('Message'), t('Amount'));
+	$rows = array();
+	foreach($items as $item) {
+	  $rows[] = array(
+	    $item['sender'],
+	    $item['receiver'],
+	    $item['message'],
+	    $item['amount'],
+	  );
+	}
+	return theme('table', array('header' => $header, 'rows' => $rows));
+}
+
+/**
+ * Function my_theming_fieldset
+ */
+function my_theming_fieldset(){
+drupal_add_library('system', 'drupal.collapse');
+$element = array( 
+	'#title'       => 'Fieldset',
+	'#children'    => 'This is main text in fieldset!', 
+	'#collapsible' => TRUE, 
+	'#collapsed'   => TRUE
+); 
+
+return theme('fieldset', array('element' => $element));
+}
+
+/**
+ * Function my_theming_image_style
+ */
+
+function my_theming_image_style(){
+	$img = array(
+    'path' => 'Ant-man.jpg',
+    'style_name' => 'large',
+    'alt' => 'Alternate Text',
+    'title' => 'Title Text',
+  );
+  return theme('image_style', $img);
+}
+
+/**
+ * Implements hook_theme()
+ */
+/*function my_theming_theme(){
+	$items = array();
+	$items['my-theming'] = array(
+		'title'           => 'My Theming',
+		'page callback'   => 'my_theming',
+		'access callback' => TRUE
+	);
+	return $items;
+}*/

@@ -9,12 +9,33 @@ function my_first_module_menu(){
 		'page callback'=> 'my_first_page',
 		'access callback'=> TRUE
 	);
+	$items['not-found'] = array(
+		'title'=> '404',
+		'page callback'=> 'not_found',
+		'access callback'=> TRUE
+	);
+	$items['forbidden'] = array(
+		'title'=> '403',
+		'page callback'=> 'forbidden_page',
+		'access callback'=> TRUE
+	);
 	return $items;
 }
-
 /**
  * Function my_first_page
  */
 function my_first_page(){
 	return ('Hello world!');
+}
+/**
+ * Function my_first_page
+ */
+function not_found_page(){
+	return ('404 Not Found');
+}
+/**
+ * Function my_first_page
+ */
+function forbidden_page(){
+	return ('403 Forbidden');
 }
