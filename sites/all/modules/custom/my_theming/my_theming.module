@@ -13,15 +13,15 @@ function my_theming_menu(){
 }
 
 /**
- * Function my_theming
+ * Callback function
  */
 
 function my_theming(){
-	return my_theming_list() . my_theming_table() . my_theming_fieldset() . my_theming_image_style();
+	return my_theming_list() . my_theming_table() . my_theming_fieldset() . my_theming_image_style() . my_theming_html_page();
 }
 
 /**
- * Function my_theming_list
+ * Callback function my_theming_list
  */
 
 function my_theming_list() {
@@ -52,7 +52,7 @@ return theme('item_list', $variables);
 }
 
 /**
- * Function my_theming_list
+ * Callback function my_theming_list
  */
 function my_theming_table(){
 	$items = array(
@@ -84,7 +84,7 @@ function my_theming_table(){
 }
 
 /**
- * Function my_theming_fieldset
+ * Callback function my_theming_fieldset
  */
 function my_theming_fieldset(){
 drupal_add_library('system', 'drupal.collapse');
@@ -92,22 +92,28 @@ $element = array(
 	'#title'       => 'Fieldset',
 	'#children'    => 'This is main text in fieldset!', 
 	'#collapsible' => TRUE, 
-	'#collapsed'   => TRUE
+	'#collapsed'   => TRUE,
+	'#attributes'  => array(
+		'class' => array(
+			'collapsible', 
+			'collapsed'
+		)
+	), 
 ); 
 
 return theme('fieldset', array('element' => $element));
 }
 
 /**
- * Function my_theming_image_style
+ * Callback function my_theming_image_style
  */
 
 function my_theming_image_style(){
 	$img = array(
-    'path' => 'Ant-man.jpg',
+    'path'       => 'Ant-man.jpg',
     'style_name' => 'large',
-    'alt' => 'Alternate Text',
-    'title' => 'Title Text',
+    'alt'        => 'Alternate Text',
+    'title'      => 'Title Text',
   );
   return theme('image_style', $img);
 }
@@ -115,12 +121,37 @@ function my_theming_image_style(){
 /**
  * Implements hook_theme()
  */
-/*function my_theming_theme(){
-	$items = array();
-	$items['my-theming'] = array(
-		'title'           => 'My Theming',
-		'page callback'   => 'my_theming',
-		'access callback' => TRUE
-	);
-	return $items;
-}*/
+function my_theming_theme($existing, $type, $theme, $path) {
+  return array(
+    'my_theming_template' => array(
+      'variables' => array(
+      	'text_one' => NULL, 
+      	'text_two' => NULL
+      ),
+    ),
+    'my_theming_template' => array(
+      'variables' => array(
+      	'text_one' => NULL, 
+      	'text_two' => NULL
+      ),
+      'template' => 'my_page'
+    ),
+  );
+}
+
+/**
+ * Callback function usinf HTML output.
+ */
+function my_theming_html_page(){
+	$text_one = "This is text one";
+	$text_two = "This is text two";
+	return theme('my_theming_template', array('text_one' => $text_one, 'text_two' => $text_two));
+}
+/**
+ *Theme function
+ */
+function theme_my_theming_template($variables){
+ 	$output  = "<h1>" . $variables['text_one'] . "</h1>";
+ 	$output .= "<strong>" . $variables['text_two'] . "<strong>";
+ 	return $output;
+}
