@@ -1,0 +1,111 @@
+<?php
+/**
+ * Implements hook_menu()
+ */
+function my_forms_menu(){
+	$items = array();
+	$items['my-form'] = array(
+		'title'=> 'Contacts',
+		'page callback'=> 'drupal_get_form',
+    'page arguments' => array('my_forms_form'),
+		'access callback'=> TRUE);
+	return $items;
+}
+
+function forms(){
+	$ololo = drupal_get_form('my_forms_form');
+	return drupal_render($ololo);
+}
+
+function my_forms_form($form, &$form_state) {
+  $form['f_name'] = array(
+    '#type'      => 'textfield',
+    '#title'     => 'First name',
+    '#maxlength' => 127,
+  );
+  $form['l_name'] = array(
+    '#type'      => 'textfield',
+    '#title'     => 'Last name',
+    '#maxlength' => 127,
+  );
+  $form['n_name'] = array(
+    '#type'      => 'textfield',
+    '#title'     => 'Nick name',
+    '#maxlength' => 20,
+    '#required'  => TRUE,
+  );
+  $form['email'] = array(
+    '#type'      => 'textfield',
+    '#title'     => 'E-Mail',
+    '#maxlength' => 20,
+    '#required'  => TRUE,
+  );
+  $form['phone'] = array(
+    '#type'      => 'textfield',
+    '#title'     => 'Phone',
+    '#maxlength' => 10,
+  ); 
+$form['sex'] = array(
+    '#title'  => t('Your sex'),
+    '#type'   => 'radios',
+    '#options'=> array('male' => t('Male'),'famele' => t('Famele')),
+    '#attributes' => array('style' => 'display:inline-block;')
+  );
+  $form['selectbox'] = array(
+    '#type'    => 'select',
+    '#title'   => 'Country',
+    '#options' => array(
+      1 => 'Ukraine',
+      2 => 'Russia',
+      3 => 'USA',
+    ),
+    '#description' => t('Choose an option.'),
+  );
+  $form['msg'] = array(
+    '#type'  => 'textarea',
+    '#title' => 'Messaging',
+    '#required'  => TRUE,
+  );
+  $form['checkbox'] = array(
+    '#type'  => 'checkbox',
+    '#title' => 'Accept',
+    '#required'  => TRUE,
+  );
+  $form['contact'] = array(
+	  '#type' => 'fieldset', 
+	  '#title' => 'fieldset', 
+	  '#collapsible' => TRUE, 
+	  '#collapsed' => FALSE,
+	  '#value' => 'Send form',
+	);
+  $form['submit'] = array(
+    '#type'  => 'submit',
+    '#value' => 'Send form',
+  );
+  return $form;
+}
+/**
+ * Validate function for my_form. 
+ */ 
+function my_forms_form_validate($form, &$form_state) { 
+	 if (!is_numeric($form_state['values']['phone'])) {
+    form_set_error('phone', t('Value in field "Phone" is wrong.'));
+   if (valid_email_address($form_state['values']['email']) == FALSE){
+   		form_set_error('email', t('Value in field "Email" is wrong.'));
+   }
+  }
+} 
+
+/**
+ * Submit function for  my_form.
+ */
+function my_forms_form_submit($form, &$form_state) {
+	drupal_set_message('You First name:' . $form_state['values']['f_name']);
+	drupal_set_message('You Last name:' . $form_state['values']['l_name']);
+	drupal_set_message('You Nick name:' . $form_state['values']['n_name']);
+	drupal_set_message('You Email:' . $form_state['values']['email']);
+	drupal_set_message('You Phone number:' . $form_state['values']['phone']);
+	drupal_set_message('You sex:' . $form_state['values']['sex']);
+	drupal_set_message('You country:' . $form_state['values']['selectbox']);
+	drupal_set_message('You Message:' . $form_state['values']['msg']);
+ }
