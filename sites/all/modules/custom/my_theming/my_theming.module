@@ -52,7 +52,7 @@ return theme('item_list', $variables);
 }
 
 /**
- * Callback function my_theming_list
+ * Callback function my_theming_table
  */
 function my_theming_table(){
 	$items = array(
@@ -80,6 +80,7 @@ function my_theming_table(){
 	    $item['amount'],
 	  );
 	}
+	print_r($items);
 	return theme('table', array('header' => $header, 'rows' => $rows));
 }
 

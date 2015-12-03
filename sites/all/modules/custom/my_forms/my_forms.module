@@ -4,17 +4,12 @@
  */
 function my_forms_menu(){
 	$items = array();
-	$items['my-form'] = array(
-		'title'=> 'Contacts',
-		'page callback'=> 'drupal_get_form',
+	$items['my-forms'] = array(
+		'title'          => 'Contacts',
+		'page callback'  => 'drupal_get_form',
     'page arguments' => array('my_forms_form'),
 		'access callback'=> TRUE);
 	return $items;
-}
-
-function forms(){
-	$ololo = drupal_get_form('my_forms_form');
-	return drupal_render($ololo);
 }
 
 function my_forms_form($form, &$form_state) {
@@ -62,21 +57,21 @@ $form['sex'] = array(
     '#description' => t('Choose an option.'),
   );
   $form['msg'] = array(
-    '#type'  => 'textarea',
-    '#title' => 'Messaging',
-    '#required'  => TRUE,
+    '#type'     => 'textarea',
+    '#title'    => 'Messaging',
+    '#required' => TRUE,
   );
   $form['checkbox'] = array(
-    '#type'  => 'checkbox',
-    '#title' => 'Accept',
+    '#type'      => 'checkbox',
+    '#title'     => 'Accept',
     '#required'  => TRUE,
   );
   $form['contact'] = array(
-	  '#type' => 'fieldset', 
-	  '#title' => 'fieldset', 
+	  '#type'        => 'fieldset', 
+	  '#title'       => 'fieldset', 
 	  '#collapsible' => TRUE, 
-	  '#collapsed' => FALSE,
-	  '#value' => 'Send form',
+	  '#collapsed'   => FALSE,
+	  '#value'       => 'Send form',
 	);
   $form['submit'] = array(
     '#type'  => 'submit',
@@ -100,12 +95,12 @@ function my_forms_form_validate($form, &$form_state) {
  * Submit function for  my_form.
  */
 function my_forms_form_submit($form, &$form_state) {
-	drupal_set_message('You First name:' . $form_state['values']['f_name']);
-	drupal_set_message('You Last name:' . $form_state['values']['l_name']);
-	drupal_set_message('You Nick name:' . $form_state['values']['n_name']);
-	drupal_set_message('You Email:' . $form_state['values']['email']);
+	drupal_set_message('You First name:'   . $form_state['values']['f_name']);
+	drupal_set_message('You Last name:'    . $form_state['values']['l_name']);
+	drupal_set_message('You Nick name:'    . $form_state['values']['n_name']);
+	drupal_set_message('You Email:'        . $form_state['values']['email']);
 	drupal_set_message('You Phone number:' . $form_state['values']['phone']);
-	drupal_set_message('You sex:' . $form_state['values']['sex']);
-	drupal_set_message('You country:' . $form_state['values']['selectbox']);
-	drupal_set_message('You Message:' . $form_state['values']['msg']);
+	drupal_set_message('You sex:'          . $form_state['values']['sex']);
+	drupal_set_message('You country:'      . $form_state['values']['selectbox']);
+	drupal_set_message('You Message:'      . $form_state['values']['msg']);
  }

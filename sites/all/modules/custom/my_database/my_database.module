@@ -1,0 +1,103 @@
+<?php 
+/**
+ * Implements hook_menu()
+ */
+function my_database_menu(){
+	$items = array();
+	$items['db_insert'] = array(
+		'title'           => 'Insert',
+		'page callback'	  => 'drupal_get_form',
+		'page arguments'  => array('my_database_form'),
+		'access callback' => TRUE
+	);
+	$items['db_select'] = array(
+		'title'           => 'Select',
+		'page callback'   => 'select_table',
+		'access callback' => TRUE
+	);
+	$items['db_update'] = array(
+		'title'           => 'Update',
+		'page callback'   => '',
+		'access callback' => TRUE
+	);
+	return $items;
+}
+
+/**
+ * Created form
+ */ 
+function my_database_form($form, &$form_state) {
+	$form['number'] = array(
+		'#type'		 	 => 'textfield',
+		'#title'		 => 'Number',
+		'#maxlength' => 127,
+		'#required'	 => TRUE,
+	);
+	$form['teaser'] = array(
+		'#type'			 => 'textfield',
+		'#title'		 => 'Teaser',
+		'#maxlength' => 127,
+		'#required'	 => TRUE,
+	);
+	$form['text'] = array(
+		'#type'	    => 'textarea',
+		'#title'    => 'Text',
+		'#required'	=> TRUE,
+	);
+	$form['action'] = array(
+		'#type'	    => 'textarea',
+		'#title'    => 'Text',
+		'#required'	=> TRUE,
+	);
+	$form['submit'] = array(
+		'#type'	 => 'submit',
+		'#value' => 'Insert data',
+	);
+	return $form;
+}
+
+/**
+ * Validate function for my_form. 
+ */ 
+function my_database_form_validate($form, &$form_state) { 
+	if (!is_numeric($form_state['values']['number'])) {
+		form_set_error('Number', t('Value in field "Number" is wrong.'));
+	}
+}
+
+/**
+ * Submit function for  my_form.
+ */
+function my_database_form_submit($form, &$form_state) {
+	db_insert('custom_table')
+	->fields(array(
+		'number' => $form_state['values']['number'],
+		'teaser' => $form_state['values']['teaser'],
+		'text'   => $form_state['values']['text'],
+	))
+	->execute();
+	drupal_set_message('Insert data from "custon_table" complite');
+}
+
+
+/**
+ * Callback function select_data
+ */
+function select_table(){
+	$db_s = db_select('custom_table','n')
+	->fields('n')
+	->orderBy('id','ASC')
+	->execute()
+	->fetchAll();
+	$header = array('id', 'number', 'teaser', 'text' , 'action');
+	foreach ($db_s as $value) {
+		$rows[] = array(
+			$value -> id,
+			$value -> number,
+			$value -> teaser,
+			$value -> text,
+			l('Edit', 'db_update/'.$value -> id).' / '. l('Delete', 'path/to/location'),
+		);
+	}
+	return theme('table', array('header' => $header, 'rows' => $rows));
+}
