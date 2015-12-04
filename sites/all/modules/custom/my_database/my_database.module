@@ -15,70 +15,121 @@ function my_database_menu(){
 		'page callback'   => 'select_table',
 		'access callback' => TRUE
 	);
-	$items['db_update'] = array(
-		'title'           => 'Update',
-		'page callback'   => '',
+	$items['db_update/%'] = array(
+		'page callback'	  => 'drupal_get_form',
+		'page arguments'  => array('my_database_form'),
+		'access callback' => TRUE
+	);
+	$items['db_delete/%'] = array(
+		'page callback'	  => 'drupal_get_form',
+		'page arguments'  => array('delete_form'),
 		'access callback' => TRUE
 	);
 	return $items;
 }
-
 /**
- * Created form
+ * Create and edit data form
  */ 
 function my_database_form($form, &$form_state) {
 	$form['number'] = array(
-		'#type'		 	 => 'textfield',
-		'#title'		 => 'Number',
-		'#maxlength' => 127,
-		'#required'	 => TRUE,
+		'#type'		 	    => 'textfield',
+		'#title'		    => 'Number',
+		'#required'	    => TRUE,
+		'#default_value'=> (arg(1) ? arg(2) : '')
 	);
 	$form['teaser'] = array(
-		'#type'			 => 'textfield',
-		'#title'		 => 'Teaser',
-		'#maxlength' => 127,
-		'#required'	 => TRUE,
+		'#type'			     => 'textfield',
+		'#title'		     => 'Teaser',
+		'#required'	     => TRUE,
+		'#default_value' => (arg(1) ? arg(3) : '')
 	);
 	$form['text'] = array(
-		'#type'	    => 'textarea',
-		'#title'    => 'Text',
-		'#required'	=> TRUE,
-	);
-	$form['action'] = array(
-		'#type'	    => 'textarea',
-		'#title'    => 'Text',
-		'#required'	=> TRUE,
+		'#type'	         => 'textarea',
+		'#title'         => 'Text',
+		'#required'	     => TRUE,
+		'#default_value' => (arg(1) ? arg(4) : '')
 	);
 	$form['submit'] = array(
 		'#type'	 => 'submit',
-		'#value' => 'Insert data',
+		'#value' => (arg(1) ? 'Ipdate data' : 'Insert data'),
 	);
 	return $form;
 }
+
+/**
+ * Delete data form
+ */ 
+function delete_form($form, &$form_state){
+	$form['delete'] = array(
+		'#type'	  => 'submit',
+		'#value'  => 'Delete data',
+		'#submit' => array('delete_form_button')
+	);
+	$form['back'] = array(
+		'#type'	  => 'submit',
+		'#value'  => 'Back',
+		'#submit' => array('redirect_select')
+	);
+	return $form;
+}
+
 
 /**
  * Validate function for my_form. 
  */ 
 function my_database_form_validate($form, &$form_state) { 
 	if (!is_numeric($form_state['values']['number'])) {
-		form_set_error('Number', t('Value in field "Number" is wrong.'));
+		form_set_error('number','Value in field "Number" is wrong.');
 	}
 }
+
+/**
+ * Submit function for  back.
+ */
+function redirect_select($form, &$form_state) {
+	$form_state['redirect'] = 'db_select';
+}
+/**
+ * Submit function for  delete.
+ */
+function delete_form_button($form, &$form_state) {
+	if (arg(1)) {
+	db_delete('custom_table')
+		->condition ('id', arg(1))
+		->execute();
+		$form_state['redirect'] = 'db_select';
+		drupal_set_message('Delete data from "custon_table" complite');
+	}
+}
+
 
 /**
  * Submit function for  my_form.
  */
 function my_database_form_submit($form, &$form_state) {
-	db_insert('custom_table')
-	->fields(array(
-		'number' => $form_state['values']['number'],
-		'teaser' => $form_state['values']['teaser'],
-		'text'   => $form_state['values']['text'],
-	))
-	->execute();
-	drupal_set_message('Insert data from "custon_table" complite');
+	if (arg(1)) {
+	db_update('custom_table')
+		->fields(array(
+			'number' => $form_state['values']['number'],
+			'teaser' => $form_state['values']['teaser'],
+			'text'   => $form_state['values']['text'],
+		))
+		->condition ('id', arg(1))
+		->execute();
+		drupal_set_message('Update data from "custon_table" complite');
+	}
+	elseif (!arg(1)) {
+		db_insert('custom_table')
+		->fields(array(
+			'number' => $form_state['values']['number'],
+			'teaser' => $form_state['values']['teaser'],
+			'text'   => $form_state['values']['text'],
+		))
+		->execute();
+		drupal_set_message('Insert data from "custon_table" complite');
+	}
+	$form_state['redirect'] = 'db_select';
 }
-
 
 /**
  * Callback function select_data
@@ -96,7 +147,7 @@ function select_table(){
 			$value -> number,
 			$value -> teaser,
 			$value -> text,
-			l('Edit', 'db_update/'.$value -> id).' / '. l('Delete', 'path/to/location'),
+			l('Edit', 'db_update/'.$value -> id.'/'.$value -> number.'/'.$value -> teaser.'/'.$value -> text).' / '. l('Delete', 'db_delete/'.$value -> id),
 		);
 	}
 	return theme('table', array('header' => $header, 'rows' => $rows));
