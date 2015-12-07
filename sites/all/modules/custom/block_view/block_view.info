@@ -1,4 +1,3 @@
-; &Id:$
 name = My Block
 description = hook_block_info and hook_block_view
 version = 7.x-dev

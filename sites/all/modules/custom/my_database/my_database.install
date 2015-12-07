@@ -1,7 +1,5 @@
 <?php
-
 /**
- * @file
  * Installation functions for My database module.
  */
 
@@ -12,16 +10,16 @@ function my_database_schema() {
   $schema['custom_table'] = array(
     'fields' => array(
       'id' => array(
-        'type' => 'serial',
+        'type'     => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
       'number' => array(
-        'type' => 'int',
+        'type'     => 'int',
         'not null' => TRUE,
       ),
-      'taeser' => array(
-        'type' => 'varchar',
+      'teaser' => array(
+        'type'   => 'varchar',
         'length' => 150,
       ),
       'text' => array(
@@ -30,5 +28,6 @@ function my_database_schema() {
     ),
     'primary key' => array('id'),
   );
+
   return $schema;
 }

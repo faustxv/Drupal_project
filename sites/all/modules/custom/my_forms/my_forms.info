@@ -1,4 +1,3 @@
-; &Id:$
 name = My Forms
 description = my_module hook_forms
 version = 7.x-dev

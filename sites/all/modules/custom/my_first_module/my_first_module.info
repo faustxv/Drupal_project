@@ -1,4 +1,3 @@
-; &Id:$
 name = My module hoor_menu
 description = hook_menu
 version = 7.x-dev

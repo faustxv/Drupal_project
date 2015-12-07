@@ -2,40 +2,44 @@
 /**
  * Implements hook_menu()
  */
-function my_first_module_menu(){
-	$items = array();
-	$items['my-page'] = array(
-		'title'=> 'My page',
-		'page callback'=> 'my_first_page',
-		'access callback'=> TRUE
-	);
-	$items['not-found'] = array(
-		'title'=> '404',
-		'page callback'=> 'not_found',
-		'access callback'=> TRUE
-	);
-	$items['forbidden'] = array(
-		'title'=> '403',
-		'page callback'=> 'forbidden_page',
-		'access callback'=> TRUE
-	);
-	return $items;
+function my_first_module_menu() {
+  $items = array();
+  $items['my-page'] = array(
+    'title'          => 'My page',
+    'page callback'  => 'my_first_page',
+    'access callback'=> TRUE
+  );
+  $items['not-found'] = array(
+    'title'          => '404',
+    'page callback'  => 'not_found_page',
+    'access callback'=> TRUE
+  );
+  $items['forbidden'] = array(
+    'title'          => '403',
+    'page callback'  => 'forbidden_page',
+    'access callback'=> TRUE
+  );
+
+  return $items;
 }
+
 /**
- * Function my_first_page
+ * Function my_first_page()
  */
-function my_first_page(){
-	return ('Hello world!');
+function my_first_page() {
+  return t('Hello world!');
 }
+
 /**
- * Function my_first_page
+ * Function not_found_page()
  */
-function not_found_page(){
-	return ('404 Not Found');
+function not_found_page() {
+  return t('404 Not Found');
 }
+
 /**
- * Function my_first_page
+ * Function forbidden_page()
  */
-function forbidden_page(){
-	return ('403 Forbidden');
+function forbidden_page() {
+  return t('403 Forbidden');
 }

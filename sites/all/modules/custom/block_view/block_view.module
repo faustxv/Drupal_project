@@ -2,36 +2,45 @@
 /**
  * Implements hook_block_info()
  */
-function block_view_block_info(){
-	$info = array();
-	$info['my_block'] = array(
-		'info' => 'My block',
-	);
-	return $info;
+function block_view_block_info() {
+  $info = array();
+  $info['my_block'] = array(
+    'info' => t('My block'),
+  );
+
+  return $info;
 }
+
 /**
- * Implements hook_block_view()
+ * Implements hook_block_view().
  */
-function block_view_block_view($mash_name = ''){
-	$block = array();
-	if ($mash_name == 'my_block' && user_access('access block_view')) {
-		$block['subject'] = 'Block Title';
-		$block['content'] = '<b>Block</b> content...';
-	}
-	elseif ($mash_name == 'my_block') {
-		$block['subject'] = 'Block Title';
-		$block['content'] = '<b>Access to view this content is denied.</b>';
-	}
-	return $block;
+function block_view_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'my_block':
+      if (user_access('access block_view')) {
+        $block['subject'] = t('Block Title');
+        $block['content'] = t('Block content...');
+      }
+      else {
+        $block['subject'] = t('Block Title');
+        $block['content'] = t('Access to view this content is denied.');
+      };
+    }
+
+  return $block;
 }
+
 /**
  * Implements hook_permission()
  */
-function block_view_permission(){
-	$access = array();
-	$access['access block_view'] = array(
-		'title'       => 'Access my Block',
-		'description' => 'access to view this content is denied.'
-	);
-	return $access;
+function block_view_permission() {
+  $access = array();
+  $access['access block_view'] = array(
+    'title'       => t('Access my Block'),
+    'description' => t('description Access my Block')
+  );
+
+  return $access;
 }
