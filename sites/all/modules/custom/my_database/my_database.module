@@ -162,7 +162,7 @@ function select_table() {
         $value->number,
         $value->teaser,
         $value->text,
-        l(t('Edit'), 'db_update/'.$value -> id).' / '. l(t('Delete'), 'db_delete/'.$value -> id),
+        l(t('Edit'), 'db_update/'.$value->id).' / '. l(t('Delete'), 'db_delete/'.$value->id),
       );
     }
     return theme('table', array('header' => $header, 'rows' => $rows));
